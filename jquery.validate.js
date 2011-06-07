@@ -591,10 +591,33 @@ $.extend($.validator, {
 		},
 
 		defaultShowErrors: function() {
+			var groupUsedList =[], nameList =[],errorList=[];			
+			
+			for(var i in this.errorMap) {
+				nameList.push(i);
+			}			
+			
+			for(var i = 0,len = this.errorList.length;i<len;i++) {
+				this.errorList[i].nameElement = nameList[i];
+				this.errorList[i].group = this.groups[nameList[i]];
+			}
+			
 			for ( var i = 0; this.errorList[i]; i++ ) {
 				var error = this.errorList[i];
-				this.settings.highlight && this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
-				this.showLabel( error.element, error.message );
+				var showLabel = true;
+			
+				if(error.group) {
+					if($.inArray(error.group,groupUsedList) == -1) {
+						groupUsedList.push(error.group);
+					}else{					
+						showLabel = false;	
+					}		
+				}			
+				this.settings.highlight && this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );$coreT
+				
+				if(showLabel) { 
+					this.showLabel( error.element, error.message );
+				}
 			}
 			if( this.errorList.length ) {
 				this.toShow = this.toShow.add( this.containers );
