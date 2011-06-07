@@ -223,7 +223,7 @@ $.extend($.validator, {
 		onfocusout: function(element) {
 			if ( !this.checkable(element) && (element.name in this.submitted || !this.optional(element)) ) {
 				this.element(element);
-			}
+			}else if(element.value=='' )this.element(element);
 		},
 		onkeyup: function(element) {
 			if ( element.name in this.submitted || element == this.lastElement ) {
